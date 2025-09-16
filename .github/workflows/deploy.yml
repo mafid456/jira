@@ -1,4 +1,4 @@
-name: Build and Push Docker Images
+name: Build, Push and Run Docker Images
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  build-and-push:
+  build-push-run:
     runs-on: ubuntu-latest
 
     steps:
@@ -40,3 +40,17 @@ jobs:
         context: ./frontend
         push: true
         tags: ${{ secrets.DOCKER_HUB_USERNAME }}/jira-frontend:latest
+
+    # 6️⃣ Run backend container (for testing)
+    - name: Run Backend Container
+      run: |
+        docker run -d -p 8000:8000 --name jira-backend ${{ secrets.DOCKER_HUB_USERNAME }}/jira-backend:latest
+        sleep 10
+        docker ps -a
+
+    # 7️⃣ Run frontend container (for testing)
+    - name: Run Frontend Container
+      run: |
+        docker run -d -p 3000:3000 --name jira-frontend ${{ secrets.DOCKER_HUB_USERNAME }}/jira-frontend:latest
+        sleep 10
+        docker ps -a
