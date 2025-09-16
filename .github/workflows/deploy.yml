@@ -24,13 +24,13 @@ jobs:
           port: 22
           script: |
             # Backend
-            docker pull yourdocker/jira-backend:latest
+            docker pull shaikmafidbasha/jira-backend:latest
             docker stop jira-backend || true
             docker rm jira-backend || true
             docker run -d -p 8000:8000 --name jira-backend yourdocker/jira-backend:latest
 
             # Frontend
-            docker pull yourdocker/jira-frontend:latest
+            docker pull shaikmafidbasha/jira-frontend:latest
             docker stop jira-frontend || true
             docker rm jira-frontend || true
             docker run -d -p 3000:3000 --name jira-frontend yourdocker/jira-frontend:latest
