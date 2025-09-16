@@ -22,19 +22,21 @@ jobs:
         run: |
           cd backend
           pip install -r requirements.txt
+          pip install pytest   # ensure pytest is available in CI
 
       - name: Run backend tests
         run: |
           cd backend
           pytest
 
-      # 🔥 Backend deploy (placeholder – depends on your hosting)
+      # 🔥 Backend deploy placeholder
+      # Replace this with actual deployment steps (Render, Railway, AWS, etc.)
       - name: Deploy backend
         run: echo "Deploy backend here (Render/Railway/AWS/etc.)"
 
   frontend:
     runs-on: ubuntu-latest
-    needs: backend
+    needs: backend   # frontend waits for backend
     steps:
       - name: Checkout repo
         uses: actions/checkout@v3
