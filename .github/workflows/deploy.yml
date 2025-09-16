@@ -10,33 +10,33 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      - name: Checkout repository
         uses: actions/checkout@v3
 
       - name: Install SSH client
         run: sudo apt-get update && sudo apt-get install -y openssh-client
 
-      - name: Deploy to Server via SSH
+      - name: Deploy backend and frontend via SSH
         uses: appleboy/ssh-action@v0.1.10
         with:
-          host: ${{ secrets.HOST }}           # Your server IP
-          username: ubuntu                    # Must be 'ubuntu' for EC2
-          key: ${{ secrets.SSH_KEY }}        # Your private SSH key
+          host: ${{ secrets.HOST }}       # Server IP
+          username: ubuntu                # EC2 default user
+          key: ${{ secrets.SSH_KEY }}    # Private key
           port: 22
           script: |
             #!/bin/bash
             set -e
 
-            echo "Pulling backend Docker image..."
+            echo "=== Deploying Backend ==="
             docker pull shaikmafidbasha/jira-backend:latest
             docker stop jira-backend || true
             docker rm jira-backend || true
             docker run -d -p 8000:8000 --name jira-backend shaikmafidbasha/jira-backend:latest
 
-            echo "Pulling frontend Docker image..."
+            echo "=== Deploying Frontend ==="
             docker pull shaikmafidbasha/jira-frontend:latest
             docker stop jira-frontend || true
             docker rm jira-frontend || true
             docker run -d -p 3000:3000 --name jira-frontend shaikmafidbasha/jira-frontend:latest
 
-            echo "Deployment completed successfully!"
+            echo "✅ Deployment completed successfully!"
