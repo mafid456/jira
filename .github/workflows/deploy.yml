@@ -26,18 +26,11 @@ jobs:
       - name: Run backend tests
         run: |
           cd backend
-          pytest || echo "No tests found"
+          pytest
 
-      - name: Install Heroku CLI
-        run: |
-          curl https://cli-assets.heroku.com/install.sh | sh
-
-      - name: Deploy backend to Heroku
-        uses: akhileshns/heroku-deploy@v3.12.12
-        with:
-          heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
-          heroku_app_name: "your-backend-app-name"
-          heroku_email: ${{ secrets.HEROKU_EMAIL }}
+      # 🔥 Backend deploy (placeholder – depends on your hosting)
+      - name: Deploy backend
+        run: echo "Deploy backend here (Render/Railway/AWS/etc.)"
 
   frontend:
     runs-on: ubuntu-latest
