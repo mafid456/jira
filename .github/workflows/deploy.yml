@@ -21,12 +21,15 @@ jobs:
       - name: Install backend dependencies
         run: |
           cd backend
+          python -m venv .venv
+          source .venv/bin/activate
           pip install -r requirements.txt
           pip install pytest
 
       - name: Run backend tests
         run: |
           cd backend
+          source .venv/bin/activate
           pytest || echo "No tests found"
 
       - name: Deploy backend
@@ -49,13 +52,11 @@ jobs:
           cd frontend
           npm install
 
-      - name: Configure frontend base path
+      - name: Configure Vite base path
         run: |
           cd frontend
-          # For React (CRA)
-          npm pkg set homepage="https://mafid456.github.io/jira"
-          # For Vite: ensure vite.config.js has `base: '/jira/'`
-          # Optional: sed -i "s|base:.*|base: '/jira/'|g" vite.config.js
+          # Ensure vite.config.js has base '/jira/'
+          sed -i "s|base:.*|base: '/jira/'|g" vite.config.js
 
       - name: Build frontend
         run: |
@@ -66,4 +67,4 @@ jobs:
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./frontend/build  # Change to ./frontend/dist if Vite
+          publish_dir: ./frontend/dist  # Vite build output
