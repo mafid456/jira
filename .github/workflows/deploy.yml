@@ -28,17 +28,20 @@ jobs:
           cd backend
           pytest || echo "No tests found"
 
-      # Optional: Deploy backend (Heroku/Render/Fly.io/AWS etc.)
-      # Example for Heroku:
+      - name: Install Heroku CLI
+        run: |
+          curl https://cli-assets.heroku.com/install.sh | sh
+
       - name: Deploy backend to Heroku
         uses: akhileshns/heroku-deploy@v3.12.12
         with:
           heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
           heroku_app_name: "your-backend-app-name"
-          heroku_email: "your-email@example.com"
+          heroku_email: ${{ secrets.HEROKU_EMAIL }}
 
   frontend:
     runs-on: ubuntu-latest
+    needs: backend
     steps:
       - name: Checkout repo
         uses: actions/checkout@v3
@@ -58,7 +61,6 @@ jobs:
           cd frontend
           npm run build
 
-      # Example: Deploy frontend to GitHub Pages
       - name: Deploy frontend to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
